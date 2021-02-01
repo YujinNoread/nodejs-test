@@ -19,8 +19,13 @@ router.get("/user", admin.user);
 router.post("/user", admin.userCreate);
 router.put("/user", admin.userUpdate);
 router.delete("/user", admin.userDelete);
-// router.post("/login", newUser.login);
-// router.get("/products", newUser.products);
-// router.get("/productsCategories", newUser.productsCategories);
+router.get("/orders", admin.orders);
+router.get("/order", admin.order);
+router.post("/orders", admin.ordersCreate);
+router.post("/orders/order_products", admin.ordersProductsCreate);
+router.put("/orders", admin.ordersUpdate);
+router.put("/orders/order_products", admin.ordersProductsUpdate);
+router.delete("/orders", admin.ordersDelete);
+router.delete("/orders/order_products", admin.ordersProductsDelete);
 
 module.exports = router;
