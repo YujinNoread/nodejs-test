@@ -8,7 +8,7 @@ exports.profile =  (req, res) => {
 		return res.send({status:"error authorization"})
 	}
 	db.users.findOne({where: {user_id}})
-	.then(user=> res.send({profile_info: {email: user.email, first_name: user.first_name, last_name: user.last_name},}))
+	.then(user=> res.send({profile_info: {email: user.email, first_name: user.first_name, last_name: user.last_name}}))
 	.catch(err=>console.log(err));
 };
 exports.orderCreate = async (req, res) => {
