@@ -2,7 +2,7 @@ const db = require("../models");
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const jwt = require('jsonwebtoken');
-const privatKey = 'shhhhh';
+const {secret} = require('../config/config');
 
 exports.registration =  (req, res) => {
 	const {email,first_name,last_name,password} = req.body;
@@ -23,7 +23,7 @@ exports.login =  (req, res) => {
 		if(!user || !bcrypt.compareSync(password, user.password)){
 			return res.send({status: res.status})
 		}
-		const token = jwt.sign({ user_id: user.id, isAdmin: user.admin}, privatKey);
+		const token = jwt.sign({ user_id: user.id, isAdmin: user.admin}, secret,{expiresIn: '24h'});
 		res.send({login:"login success", token:token});
 	}).catch(err=>console.log(err));
 };

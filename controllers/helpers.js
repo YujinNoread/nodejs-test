@@ -1,10 +1,10 @@
 const jwt = require('jsonwebtoken');
-const privatKey = 'shhhhh';
+const {secret} = require('../config/config');
 exports.getUserId =  (token) => {
 	if(!token){
 		return false
 	}
-	const decoded = jwt.verify(token, privatKey);
+	const decoded = jwt.verify(token, secret);
 	if(!decoded || !decoded.user_id){
 		return false
 	}
@@ -14,7 +14,7 @@ exports.getAdminId =  (token) => {
 	if(!token){
 		return false
 	}
-	const decoded = jwt.verify(token, privatKey);
+	const decoded = jwt.verify(token, secret);
 	if(!decoded || !decoded.user_id || !decoded.isAdmin){
 		return false
 	}
