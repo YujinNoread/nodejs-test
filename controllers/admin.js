@@ -5,10 +5,12 @@ const saltRounds = 10;
 const moment = require("moment");
 
 exports.products =  async (req, res) => {
-	const admin_id = check.getAdminId(req.headers.token);
+	const admin_id = check.getUserId(req.headers.token, true);
+
 	if(!admin_id){
 		return res.send({status:"error authorization"})
 	}
+
 	const products = await db.products.findAll()
 	res.send({products: products})
 };
@@ -73,11 +75,14 @@ exports.productsCategories =  async (req, res) => {
 };
 exports.productCategories =  async (req, res) => {
 	const admin_id = check.getAdminId(req.headers.token);
+
 	if(!admin_id){
 		return res.send({status:"error authorization"})
 	}
+
 	const productsCategories_id = req.query.productsCategories_id
 	const productsCategories = await db.products_categories.findOne({where: {id: productsCategories_id}})
+	
 	res.send({productsCategories: productsCategories})
 };
 exports.productsCategoriesCreate =  async (req, res) => {

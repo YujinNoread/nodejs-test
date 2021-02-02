@@ -4,12 +4,23 @@ const moment = require("moment");
 
 exports.profile =  (req, res) => {
 	const user_id = check.getUserId(req.headers.token);
+
 	if(!user_id){
 		return res.send({status:"error authorization"})
 	}
-	db.users.findOne({where: {user_id}})
-	.then(user=> res.send({profile_info: {email: user.email, first_name: user.first_name, last_name: user.last_name}}))
-	.catch(err=>console.log(err));
+
+	db.users
+		.findOne({where: {user_id}})
+		.then(user=> 
+			res.send({
+				profile_info: {
+					email: user.email, 
+					first_name: user.first_name, 
+					last_name: user.last_name
+				}
+			})
+		)
+		.catch(err=>console.log(err));
 };
 exports.orderCreate = async (req, res) => {
 	const user_id = check.getUserId(req.headers.token);
@@ -19,7 +30,7 @@ exports.orderCreate = async (req, res) => {
 	const {products} = req.body;
 	const order = await db.orders.create({
 		user_id,
-		created_at: moment().format('YYYY-MM-DD HH:mm:ss')
+		created_at: moment().format('YYYY-MM-DD HH:mm:ss') // date-fns
 	})
 	for (const userProduct of products) {
 		const product= await db.products.findOne({where: {id: userProduct.product_id}})
@@ -27,7 +38,7 @@ exports.orderCreate = async (req, res) => {
 			order_id: order.id,
 			product_id: userProduct.product_id,
 			count: userProduct.count,
-			total_price: product.price * userProduct.count
+			price: product.price
 		})
 	}
 	res.send({order:"created", order_id: order.id})
@@ -37,7 +48,7 @@ exports.orders = async (req, res) => {
 	if(!user_id){
 		return res.send({status:"error authorization"})
 	}
-	var result=[];
+	const result=[];
 	const orders = await db.orders.findAll({where: {user_id}})
 
 	for (const order of orders) {
